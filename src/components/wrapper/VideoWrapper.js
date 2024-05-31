@@ -9,13 +9,12 @@ import {
   RemoteUser,
   usePublish,
 } from "agora-rtc-react";
-import { config } from "@/config/agoraConfig";
 
 export default function VideoWrapper() {
   useJoin(async function fetchRTCToken() {
-    if (config.serverUrl !== "") {
+    if (process.env.serverUrl !== "") {
       try {
-        const response = await fetch(`${config.serverUrl}/getToken`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_serverUrl}/getToken`, {
           method: "POST",
           mode: "cors",
           headers: {
@@ -23,17 +22,17 @@ export default function VideoWrapper() {
           },
           body: JSON.stringify({
             tokenType: "rtc",
-            channel: config.channelName,
-            role: "publisher", // "publisher" or "subscriber"
+            channel: process.env.NEXT_PUBLIC_channelName,
+            role: "publisher",
             uid: "0",
-            expire: 3600, // optional: expiration time in seconds (default: 3600)
+            expire: 3600, 
           }),
         });
         const data = await response.json();
         console.log("RTC token fetched from server: ", data);
         return {
-          appid: config.appId,
-          channel: config.channelName,
+          appid: process.env.NEXT_PUBLIC_appId,
+          channel: process.env.NEXT_PUBLIC_channelName,
           token: data.token,
         };
       } catch (error) {
