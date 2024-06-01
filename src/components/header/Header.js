@@ -7,7 +7,7 @@ export default function Header({ title }) {
       </h6>
       <p>
         Stay connected and collaborate with friends, family and colleagues no
-        matter where you are. Sign in below to get Started
+        matter where you are.
       </p>
     </>
   );

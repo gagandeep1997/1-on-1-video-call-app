@@ -5,8 +5,6 @@ import {
   useLocalCameraTrack,
   useLocalMicrophoneTrack,
   LocalUser,
-  useRemoteUsers,
-  RemoteUser,
   usePublish,
 } from "agora-rtc-react";
 
@@ -14,22 +12,24 @@ export default function VideoWrapper() {
   useJoin(async function fetchRTCToken() {
     if (process.env.serverUrl !== "") {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_serverUrl}/getToken`, {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            tokenType: "rtc",
-            channel: process.env.NEXT_PUBLIC_channelName,
-            role: "publisher",
-            uid: "0",
-            expire: 3600, 
-          }),
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_serverUrl}/getToken`,
+          {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              tokenType: "rtc",
+              channel: process.env.NEXT_PUBLIC_channelName,
+              role: "publisher",
+              uid: "0",
+              expire: 3600,
+            }),
+          }
+        );
         const data = await response.json();
-        console.log("RTC token fetched from server: ", data);
         return {
           appid: process.env.NEXT_PUBLIC_appId,
           channel: process.env.NEXT_PUBLIC_channelName,
@@ -44,38 +44,40 @@ export default function VideoWrapper() {
     }
   }, true);
 
-  const { localCameraTrack } = useLocalCameraTrack();
+  const { localCameraTrack } = useLocalCameraTrack(true);
   const { localMicrophoneTrack } = useLocalMicrophoneTrack(true, {
     ANS: true,
     AEC: true,
   });
 
-  usePublish(
-    [localCameraTrack, localMicrophoneTrack],
-    localCameraTrack & localMicrophoneTrack
+  let isPublish = false;
+  if (localCameraTrack && localMicrophoneTrack) {
+    isPublish = true;
+  }
+
+  console.log(
+    "localcamera",
+    localCameraTrack,
+    "localmircophone",
+    localMicrophoneTrack
   );
-  const remoteUsers = useRemoteUsers();
+  const { error, isLoading } = usePublish(
+    [localCameraTrack, localMicrophoneTrack],
+    isPublish
+  );
+
   return (
     <>
       <div className="vid" style={{ height: 300, width: 600 }}>
         <LocalUser
           audioTrack={localMicrophoneTrack}
-          cameraOn
-          micOn
-          playAudio
-          playVideo
+          cameraOn={true}
+          micOn={true}
+          playAudio={true}
+          playVideo={true}
           videoTrack={localCameraTrack}
         />
       </div>
-      {remoteUsers?.map((remoteUser) => (
-        <div
-          className="vid"
-          style={{ height: 300, width: 600 }}
-          key={remoteUser.uid}
-        >
-          <RemoteUser user={remoteUser} playVideo={true} playAudio={true} />
-        </div>
-      ))}
     </>
   );
 }

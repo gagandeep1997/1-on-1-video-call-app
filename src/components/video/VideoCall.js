@@ -10,12 +10,14 @@ const AgoraWrapperDynamic = dynamic(() => import("../wrapper/agoraWrapper"), {
 
 export default function VideoCall() {
   const [localUserJoined, setLocalUserJoined] = useState(false);
+  const [joinVideo, setJoinVideo] = useState(false);
   return (
     <>
-      <AgoraWrapperDynamic localUserJoined={localUserJoined} />
+      <AgoraWrapperDynamic localUserJoined={localUserJoined} joinVideo={joinVideo} />
       <ButtonWrapper
         playVideo={() => setLocalUserJoined(true)}
         stopVideo={() => setLocalUserJoined(false)}
+        joinVideo={() => setJoinVideo(true)}
       />
     </>
   );
