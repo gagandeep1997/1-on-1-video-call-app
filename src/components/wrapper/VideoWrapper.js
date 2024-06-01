@@ -55,20 +55,11 @@ export default function VideoWrapper() {
     isPublish = true;
   }
 
-  console.log(
-    "localcamera",
-    localCameraTrack,
-    "localmircophone",
-    localMicrophoneTrack
-  );
-  const { error, isLoading } = usePublish(
-    [localCameraTrack, localMicrophoneTrack],
-    isPublish
-  );
+  usePublish([localCameraTrack, localMicrophoneTrack], isPublish);
 
   return (
     <>
-      <div className="vid" style={{ height: 300, width: 600 }}>
+      <div className="vid w-64 h-48 sm:w-96 sm:h-48 lg:w-[600px] lg:h-[300px]">
         <LocalUser
           audioTrack={localMicrophoneTrack}
           cameraOn={true}
