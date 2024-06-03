@@ -1,6 +1,8 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## 1-on-1 Video call app
 
-## Getting Started
+This is a video call app that lets you do a video call with anyone from anywhere.
+it is live at: [https://gagan-1-on-1-video-call-app.netlify.app/](https://gagan-1-on-1-video-call-app.netlify.app/)
+
 
 First, run the development server:
 
